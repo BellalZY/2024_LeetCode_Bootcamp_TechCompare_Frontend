@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 function BasicExample() {
   // Initialize state directly from localStorage if available
   const { user2, login, logout } = useContext(UserContext); // 使用 useContext 钩子访问 Context
-  
+  // const navigate = useNavigate();
   const [user, setUser] = useState({
     isLoggedIn: !!localStorage.getItem('email'),
     email: localStorage.getItem('email') || '',
@@ -42,7 +42,16 @@ function BasicExample() {
       isLoggedIn: !!localStorage.getItem('email'),
       email: localStorage.getItem('email') || '',
     });
-  }, [refresh]); // 依赖于refresh状态的改变
+  }, [refresh]); // 依赖于refresh状态的改变\
+
+  const handleWishList = () => {
+    if (user2.email==""){
+      alert("Sign in First!");
+      console.log("Email is null, exiting function.");
+      return;  // 当邮箱为空时，直接返回不再执行之后的代码
+    }
+    // navigate("/wishlistpage");
+  };
 
   const handleLogin = () => {
     const email = '';  // 这里应该从登录表单获取
@@ -72,8 +81,18 @@ function BasicExample() {
 
             </Nav>
             <Nav className="ms-auto">
+
+            {user2.isLoggedIn ? (
+                <Nav.Link href="/wishlistpage">Wish List</Nav.Link>
+            ) : (
+                <Nav.Link onClick={handleWishList}>Wish List</Nav.Link>
+            )}
+            {/* <Nav.Link href="/wishlistpage">Wish List</Nav.Link>/ */}
+            {/* <Nav.Link onClick={handleWishList}>Wish List</Nav.Link> */}
+
             {/* <Nav.Link href="/wishlistpage">Wish List</Nav.Link> */}
-              <Link className="nav-link me-auto" to="/wishlistpage">Wish List</Link>
+
+
             {user2.isLoggedIn ? (
               <NavDropdown title={user2.email} id="basic-nav-dropdown">
                 <NavDropdown.Item onClick={handleLogout}>Sign out</NavDropdown.Item>
